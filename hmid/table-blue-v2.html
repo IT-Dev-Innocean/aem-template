@@ -1,0 +1,169 @@
+<html>
+
+<head>
+    <title>Paket EV Hyundai</title>
+    <style>
+        /* Wrapper: 60px gutters on desktop, none on mobile */
+        .table-wrapper {
+            margin: 0 0px;
+            overflow-x: auto;
+        }
+
+        .table {
+            display: table;
+            width: 100%;
+            border-collapse: collapse;
+            font-family: sans-serif;
+            line-height: 1.5;
+        }
+
+        .row {
+            display: table-row;
+        }
+
+        .cell {
+            display: table-cell;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            vertical-align: middle;
+            line-height: 1.5;
+        }
+
+        .cell.header {
+            background-color: #002C5F;
+            color: #fff;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .col-no {
+            width: 5%;
+            text-align: center;
+        }
+
+        .col-kota {
+            width: 20%;
+            text-align: center;
+        }
+
+        .col-lokasi {
+            width: 45%;
+            text-align: center;
+        }
+
+        .col-tanggal {
+            width: 30%;
+            text-align: center;
+        }
+
+        /* Mobile “card” override */
+        @media (max-width: 600px) {
+            .table-wrapper {
+                margin: 0;
+            }
+
+            .table {
+                display: block;
+            }
+
+            .row.header {
+                display: none;
+            }
+
+            .row {
+                display: block;
+                width: 100vw;
+                margin-left: calc(50% - 50vw);
+                margin-bottom: 16px;
+                border: 1px solid #ddd;
+                border-radius: 0;
+                overflow: hidden;
+            }
+
+            .cell {
+                display: flex;
+                justify-content: start;
+                padding: 12px 16px;
+                border: none;
+                border-bottom: 1px solid #ddd;
+                width: 100%;
+            }
+
+            .row .cell:last-child {
+                border-bottom: none;
+            }
+
+            .cell::before {
+                content: attr(data-label) ":";
+                font-weight: bold;
+                margin-right: 0.5em;
+
+            }
+
+            .cell:first-child {
+                background-color: #002C5F;
+                color: #fff;
+                font-weight: bold;
+            }
+
+            .col-benefit {
+                width: 90% !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="sectionInner">
+        <div class="ctocWrap">
+            <div class="table-wrapper">
+                <div class="table">
+                    <div class="row header">
+                        <div class="cell header col-no">No</div>
+                        <div class="cell header col-kota">City</div>
+                        <div class="cell header col-lokasi">Venue</div>
+                        <div class="cell header col-tanggal">Date</div>
+                    </div>
+                    <div class="row">
+                        <div class="cell col-no" data-label="No">1</div>
+                        <div class="cell col-kota" data-label="Kota">Jakarta</div>
+                        <div class="cell col-lokasi" data-label="Lokasi">Ground Floor, Living World Alam Sutera</div>
+                        <div class="cell col-tanggal" data-label="Tanggal">12 - 18 Mei 2026</div>
+                    </div>
+                    <div class="row">
+                        <div class="cell col-no" data-label="No">2</div>
+                        <div class="cell col-kota" data-label="Kota">Semarang</div>
+                        <div class="cell col-lokasi" data-label="Lokasi">Ground Floor, Queen City</div>
+                        <div class="cell col-tanggal" data-label="Tanggal">12 - 18 Mei 2026</div>
+                    </div>
+                    <div class="row">
+                        <div class="cell col-no" data-label="No">3</div>
+                        <div class="cell col-kota" data-label="Kota">Bali</div>
+                        <div class="cell col-lokasi" data-label="Lokasi">Atrium Legong, Living World Denpasar</div>
+                        <div class="cell col-tanggal" data-label="Tanggal">13 - 19 Mei 2026</div>
+                    </div>
+                    <div class="row">
+                        <div class="cell col-no" data-label="No">4</div>
+                        <div class="cell col-kota" data-label="Kota">Cirebon</div>
+                        <div class="cell col-lokasi" data-label="Lokasi">Main Lobby, CSB Mall</div>
+                        <div class="cell col-tanggal" data-label="Tanggal">15 - 24 Mei 2026</div>
+                    </div>
+                    <div class="row">
+                        <div class="cell col-no" data-label="No">5</div>
+                        <div class="cell col-kota" data-label="Kota">Samarinda</div>
+                        <div class="cell col-lokasi" data-label="Lokasi">Ground Floor, Big Mall</div>
+                        <div class="cell col-tanggal" data-label="Tanggal">25 - 31 Mei 2026</div>
+                    </div>
+                    <div class="row">
+                        <div class="cell col-no" data-label="No">6</div>
+                        <div class="cell col-kota" data-label="Kota">Batam</div>
+                        <div class="cell col-lokasi" data-label="Lokasi">Atrium 2, Grand Batam Mall</div>
+                        <div class="cell col-tanggal" data-label="Tanggal">25 - 31 Mei 2026</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

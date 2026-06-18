@@ -1,0 +1,96 @@
+<html>
+
+<head>
+    <title>EV Highlight Info</title>
+    <style>
+        .counter-section {
+            display: flex;
+            justify-content: center;
+            text-align: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin: 20px 0 60px;
+        }
+
+        .counter-box {
+            flex: 1;
+            min-width: 200px;
+            max-width: 300px;
+        }
+
+        .counter-number {
+            font-size: 48px;
+            font-weight: bold;
+        }
+
+        .counter-label {
+            margin-top: 10px;
+        }
+
+        .counter-desc {
+            font-size: 16px;
+            color: #333;
+            margin-top: 4px;
+        }
+
+        @media (max-width: 768px) {
+            .counter-number {
+                font-size: 36px;
+            }
+
+            .counter-label {
+                font-size: 14px;
+            }
+
+            .counter-desc {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="counter-section">
+        <div class="counter-box">
+            <div class="counter-number" data-target="150">0</div>
+            <div class="counter-label"><b>Pengguna</b> telah menikmati</div>
+            <div class="counter-desc">kemudahannya</div>
+        </div>
+        <div class="counter-box">
+            <div class="counter-number" data-target="19" data-suffix="%*">0%</div>
+            <div class="counter-label"><b>Lebih murah</b> dari biaya</div>
+            <div class="counter-desc">charging regular SPKLU</div>
+        </div>
+        <div class="counter-box">
+            <div class="counter-number" data-target="600" data-suffix="+">0</div>
+            <div class="counter-label"><b>Lokasi charging</b> yang dikelola</div>
+            <div class="counter-desc">Hyundai dan partner CPO</div>
+        </div>
+    </div>
+
+    <script>
+        const counters = document.querySelectorAll('.counter-number');
+        const speed = 20;
+
+        counters.forEach(counter => {
+            const updateCount = () => {
+                const target = +counter.getAttribute('data-target');
+                const suffix = counter.getAttribute('data-suffix') || '+';
+                const count = +counter.innerText.replace(/\D/g, '');
+
+                const increment = Math.ceil(target / speed);
+
+                if (count < target) {
+                    counter.innerText = count + increment + suffix;
+                    setTimeout(updateCount, 40);
+                } else {
+                    counter.innerText = target + suffix;
+                }
+            };
+
+            updateCount();
+        });
+    </script>
+</body>
+
+</html>

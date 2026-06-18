@@ -1,0 +1,92 @@
+<html>
+
+<head>
+    <title>EV Highlight Info</title>
+    <style>
+        .counter-section {
+            display: flex;
+            justify-content: center;
+            text-align: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin: 20px 0 60px;
+        }
+
+        .counter-box {
+            flex: 1;
+            min-width: 200px;
+            max-width: 300px;
+        }
+
+        .counter-number {
+            font-size: 48px;
+            font-weight: bold;
+        }
+
+        .counter-label {
+            margin-top: 10px;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .counter-label span {
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .counter-number {
+                font-size: 36px;
+            }
+
+            .counter-label {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="counter-section">
+        <div class="counter-box">
+            <div class="counter-number" data-target="150" data-suffix="+">0</div>
+            <div class="counter-label"><span>Customers</span> have experienced</div>
+            <div class="counter-desc">various conveniences</div>
+        </div>
+        <div class="counter-box">
+            <div class="counter-number" data-target="19" data-suffix="%*">0%</div>
+            <div class="counter-label"><span>Cheaper</span> than regular EV</div>
+            <div class="counter-desc">Charging costs at SPKLU</div>
+        </div>
+        <div class="counter-box">
+            <div class="counter-number" data-target="600" data-suffix="+">0</div>
+            <div class="counter-label"><span>Charging points</span> managed by</div>
+            <div class="counter-desc">Hyundai and its partners.</div>
+        </div>
+    </div>
+
+    <script>
+        const counters = document.querySelectorAll('.counter-number');
+        const speed = 20;
+
+        counters.forEach(counter => {
+            const updateCount = () => {
+                const target = +counter.getAttribute('data-target');
+                const suffix = counter.getAttribute('data-suffix') || '+';
+                const count = +counter.innerText.replace(/\D/g, '');
+
+                const increment = Math.ceil(target / speed);
+
+                if (count < target) {
+                    counter.innerText = count + increment + suffix;
+                    setTimeout(updateCount, 40);
+                } else {
+                    counter.innerText = target + suffix;
+                }
+            };
+
+            updateCount();
+        });
+    </script>
+</body>
+
+</html>
