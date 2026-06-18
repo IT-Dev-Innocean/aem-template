@@ -25,6 +25,7 @@ export async function saveFileContent(path: string, content: string): Promise<vo
   });
 
   if (!response.ok) {
-    throw new Error(`Failed to save file: ${path}`);
+    const data = (await response.json().catch(() => null)) as { error?: string } | null;
+    throw new Error(data?.error ?? `Failed to save file: ${path}`);
   }
 }

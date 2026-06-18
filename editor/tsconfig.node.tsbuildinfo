@@ -1,1 +1,1 @@
-{"root":["./vite.config.ts","./vite-plugin-file-api.ts"],"version":"6.0.3"}
+{"root":["./vite.config.ts","./vite-plugin-file-api.ts","./shared/file-api-core.ts","./netlify/functions/files.ts"],"version":"6.0.3"}

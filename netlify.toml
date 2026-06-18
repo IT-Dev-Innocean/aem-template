@@ -1,17 +1,21 @@
 # Konfigurasi Netlify untuk monorepo (editor ada di subfolder).
 # File ini OVERRIDE pengaturan di Netlify UI — cukup push ke GitHub lalu redeploy.
-#
-# Opsi A (aktif): base = editor → publish "dist" = folder editor/dist
-# Opsi B (alternatif): jika Base directory di UI tidak bisa dihapus dan masih error,
-#   ganti ke Opsi B di bawah (uncomment baris Opsi B, comment/hapus Opsi A).
 
-# --- Opsi A: build dari folder editor ---
 [build]
   base = "editor"
   command = "npm run build"
   publish = "dist"
 
-# --- Opsi B: build dari repo root (Base directory UI = kosong /) ---
-# [build]
-#   command = "npm ci --prefix editor && npm run build --prefix editor"
-#   publish = "editor/dist"
+[functions]
+  directory = "netlify/functions"
+  included_files = ["netlify/functions/templates/**"]
+
+[[redirects]]
+  from = "/api/files"
+  to = "/.netlify/functions/files"
+  status = 200
+
+[[redirects]]
+  from = "/api/files/*"
+  to = "/.netlify/functions/files/:splat"
+  status = 200

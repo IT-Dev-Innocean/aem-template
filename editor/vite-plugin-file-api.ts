@@ -1,74 +1,21 @@
-import fs from "node:fs";
-import path from "node:path";
 import type { Plugin } from "vite";
+import type { IncomingMessage, ServerResponse } from "node:http";
+import {
+  buildFileTree,
+  readFileContent,
+  writeFileContent,
+  type FileNode,
+} from "./shared/file-api-core.ts";
 
-const ALLOWED_ROOTS = ["hmid", "kia"] as const;
+export type { FileNode };
 
-export type FileNode = {
-  name: string;
-  path: string;
-  type: "file" | "folder";
-  children?: FileNode[];
-};
-
-function resolveSafePath(projectRoot: string, relativePath: string): string | null {
-  const normalized = path.normalize(relativePath).replace(/^(\.\.(\/|\\|$))+/, "");
-  const fullPath = path.resolve(projectRoot, normalized);
-  const relative = path.relative(projectRoot, fullPath);
-
-  if (relative.startsWith("..") || path.isAbsolute(relative)) {
-    return null;
-  }
-
-  const rootFolder = relative.split(path.sep)[0];
-  if (!ALLOWED_ROOTS.includes(rootFolder as (typeof ALLOWED_ROOTS)[number])) {
-    return null;
-  }
-
-  return fullPath;
-}
-
-function buildTree(dirPath: string, relativePath: string): FileNode[] {
-  if (!fs.existsSync(dirPath)) {
-    return [];
-  }
-
-  return fs
-    .readdirSync(dirPath, { withFileTypes: true })
-    .filter((entry) => !entry.name.startsWith("."))
-    .sort((a, b) => {
-      if (a.isDirectory() && !b.isDirectory()) return -1;
-      if (!a.isDirectory() && b.isDirectory()) return 1;
-      return a.name.localeCompare(b.name);
-    })
-    .map((entry) => {
-      const entryRelative = path.join(relativePath, entry.name);
-      const entryAbsolute = path.join(dirPath, entry.name);
-
-      if (entry.isDirectory()) {
-        return {
-          name: entry.name,
-          path: entryRelative.replace(/\\/g, "/"),
-          type: "folder" as const,
-          children: buildTree(entryAbsolute, entryRelative),
-        };
-      }
-
-      return {
-        name: entry.name,
-        path: entryRelative.replace(/\\/g, "/"),
-        type: "file" as const,
-      };
-    });
-}
-
-function sendJson(res: import("node:http").ServerResponse, status: number, data: unknown) {
+function sendJson(res: ServerResponse, status: number, data: unknown) {
   res.statusCode = status;
   res.setHeader("Content-Type", "application/json");
   res.end(JSON.stringify(data));
 }
 
-function readBody(req: import("node:http").IncomingMessage): Promise<string> {
+function readBody(req: IncomingMessage): Promise<string> {
   return new Promise((resolve, reject) => {
     let body = "";
     req.on("data", (chunk) => {
@@ -85,8 +32,8 @@ function attachFileApi(
       use: (
         path: string,
         handler: (
-          req: import("node:http").IncomingMessage,
-          res: import("node:http").ServerResponse,
+          req: IncomingMessage,
+          res: ServerResponse,
           next: (error?: unknown) => void,
         ) => void,
       ) => void;
@@ -100,13 +47,7 @@ function attachFileApi(
       const pathname = decodeURIComponent(url.pathname);
 
       if (req.method === "GET" && (pathname === "/" || pathname === "")) {
-        const tree: FileNode[] = ALLOWED_ROOTS.map((folder) => ({
-          name: folder,
-          path: folder,
-          type: "folder" as const,
-          children: buildTree(path.join(projectRoot, folder), folder),
-        }));
-        sendJson(res, 200, tree);
+        sendJson(res, 200, buildFileTree(projectRoot));
         return;
       }
 
@@ -117,14 +58,13 @@ function attachFileApi(
           return;
         }
 
-        const safePath = resolveSafePath(projectRoot, filePath);
-        if (!safePath || !fs.existsSync(safePath) || !fs.statSync(safePath).isFile()) {
+        const result = readFileContent(projectRoot, filePath);
+        if (!result) {
           sendJson(res, 404, { error: "File not found" });
           return;
         }
 
-        const content = fs.readFileSync(safePath, "utf-8");
-        sendJson(res, 200, { path: filePath, content });
+        sendJson(res, 200, result);
         return;
       }
 
@@ -135,12 +75,6 @@ function attachFileApi(
           return;
         }
 
-        const safePath = resolveSafePath(projectRoot, filePath);
-        if (!safePath) {
-          sendJson(res, 403, { error: "Invalid path" });
-          return;
-        }
-
         const body = await readBody(req);
         const parsed = JSON.parse(body) as { content?: string };
         if (typeof parsed.content !== "string") {
@@ -148,9 +82,13 @@ function attachFileApi(
           return;
         }
 
-        fs.mkdirSync(path.dirname(safePath), { recursive: true });
-        fs.writeFileSync(safePath, parsed.content, "utf-8");
-        sendJson(res, 200, { path: filePath, saved: true });
+        const result = writeFileContent(projectRoot, filePath, parsed.content);
+        if (!result) {
+          sendJson(res, 403, { error: "Invalid path" });
+          return;
+        }
+
+        sendJson(res, 200, result);
         return;
       }
 
