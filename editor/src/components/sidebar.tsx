@@ -131,6 +131,8 @@ export function Sidebar() {
   const { data: tree = [], isLoading, error } = useQuery({
     queryKey: ["file-tree"],
     queryFn: fetchFileTree,
+    refetchInterval: import.meta.env.PROD ? 30_000 : false,
+    staleTime: import.meta.env.PROD ? 15_000 : 30_000,
   });
 
   return (
@@ -158,7 +160,8 @@ export function Sidebar() {
       )}
 
       <div className="border-t border-vscode-border px-3 py-2 text-[11px] text-vscode-muted">
-        {tree.reduce((count, node) => count + flattenFiles([node]).length, 0)} HTML files in hmid & kia
+        {tree.reduce((count, node) => count + flattenFiles([node]).length, 0)} template files
+        {tree.length > 0 ? ` in ${tree.map((node) => node.name).join(", ")}` : ""}
       </div>
     </aside>
   );

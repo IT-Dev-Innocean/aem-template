@@ -1,7 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
-
-export const ALLOWED_ROOTS = ["hmid", "kia"] as const;
+import { isTemplateRoot } from "./template-roots.ts";
 
 export type FileNode = {
   name: string;
@@ -9,6 +8,18 @@ export type FileNode = {
   type: "file" | "folder";
   children?: FileNode[];
 };
+
+export function getTemplateRoots(projectRoot: string): string[] {
+  if (!fs.existsSync(projectRoot)) {
+    return [];
+  }
+
+  return fs
+    .readdirSync(projectRoot, { withFileTypes: true })
+    .filter((entry) => entry.isDirectory() && isTemplateRoot(entry.name))
+    .map((entry) => entry.name)
+    .sort((a, b) => a.localeCompare(b));
+}
 
 export function resolveSafePath(projectRoot: string, relativePath: string): string | null {
   const normalized = path.normalize(relativePath).replace(/^(\.\.(\/|\\|$))+/, "");
@@ -20,7 +31,7 @@ export function resolveSafePath(projectRoot: string, relativePath: string): stri
   }
 
   const rootFolder = relative.split(path.sep)[0];
-  if (!ALLOWED_ROOTS.includes(rootFolder as (typeof ALLOWED_ROOTS)[number])) {
+  if (!isTemplateRoot(rootFolder)) {
     return null;
   }
 
@@ -62,7 +73,7 @@ function buildTree(dirPath: string, relativePath: string): FileNode[] {
 }
 
 export function buildFileTree(projectRoot: string): FileNode[] {
-  return ALLOWED_ROOTS.map((folder) => ({
+  return getTemplateRoots(projectRoot).map((folder) => ({
     name: folder,
     path: folder,
     type: "folder" as const,

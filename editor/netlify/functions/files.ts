@@ -1,20 +1,17 @@
 import type { Handler } from "@netlify/functions";
-import rawTemplateData from "./template-data.json";
-
-const templateData = rawTemplateData as {
-  tree: Array<{
-    name: string;
-    path: string;
-    type: "file" | "folder";
-    children?: Array<unknown>;
-  }>;
-  files: Record<string, string>;
-};
+import {
+  fetchGitHubFileContent,
+  fetchGitHubFileTree,
+} from "../../shared/github-file-api.ts";
+import { isTemplateRoot } from "../../shared/template-roots.ts";
 
 function jsonResponse(status: number, data: unknown) {
   return {
     statusCode: status,
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      "Cache-Control": "no-store",
+    },
     body: JSON.stringify(data),
   };
 }
@@ -28,8 +25,7 @@ function getApiPath(eventPath: string): string {
 }
 
 function isAllowedPath(filePath: string): boolean {
-  const root = filePath.split("/")[0];
-  return root === "hmid" || root === "kia";
+  return isTemplateRoot(filePath.split("/")[0] ?? "");
 }
 
 export const handler: Handler = async (event) => {
@@ -37,7 +33,8 @@ export const handler: Handler = async (event) => {
     const pathname = getApiPath(event.path);
 
     if (event.httpMethod === "GET" && (pathname === "/" || pathname === "")) {
-      return jsonResponse(200, templateData.tree);
+      const tree = await fetchGitHubFileTree();
+      return jsonResponse(200, tree);
     }
 
     if (event.httpMethod === "GET" && pathname.startsWith("/content")) {
@@ -50,12 +47,12 @@ export const handler: Handler = async (event) => {
         return jsonResponse(403, { error: "Invalid path" });
       }
 
-      const content = templateData.files[filePath];
-      if (content === undefined) {
+      try {
+        const content = await fetchGitHubFileContent(filePath);
+        return jsonResponse(200, { path: filePath, content });
+      } catch {
         return jsonResponse(404, { error: "File not found" });
       }
-
-      return jsonResponse(200, { path: filePath, content });
     }
 
     if (event.httpMethod === "PUT" && pathname.startsWith("/content")) {
