@@ -8,7 +8,6 @@
 
 [functions]
   directory = "netlify/functions"
-  included_files = ["netlify/functions/templates/**"]
 
 [[redirects]]
   from = "/api/files"

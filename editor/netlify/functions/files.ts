@@ -1,15 +1,15 @@
 import type { Handler } from "@netlify/functions";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
-import {
-  buildFileTree,
-  readFileContent,
-} from "../../shared/file-api-core.ts";
+import rawTemplateData from "./template-data.json";
 
-const templatesRoot = path.join(
-  path.dirname(fileURLToPath(import.meta.url)),
-  "templates",
-);
+const templateData = rawTemplateData as {
+  tree: Array<{
+    name: string;
+    path: string;
+    type: "file" | "folder";
+    children?: Array<unknown>;
+  }>;
+  files: Record<string, string>;
+};
 
 function jsonResponse(status: number, data: unknown) {
   return {
@@ -27,12 +27,17 @@ function getApiPath(eventPath: string): string {
   );
 }
 
+function isAllowedPath(filePath: string): boolean {
+  const root = filePath.split("/")[0];
+  return root === "hmid" || root === "kia";
+}
+
 export const handler: Handler = async (event) => {
   try {
     const pathname = getApiPath(event.path);
 
     if (event.httpMethod === "GET" && (pathname === "/" || pathname === "")) {
-      return jsonResponse(200, buildFileTree(templatesRoot));
+      return jsonResponse(200, templateData.tree);
     }
 
     if (event.httpMethod === "GET" && pathname.startsWith("/content")) {
@@ -41,12 +46,16 @@ export const handler: Handler = async (event) => {
         return jsonResponse(400, { error: "Missing path parameter" });
       }
 
-      const result = readFileContent(templatesRoot, filePath);
-      if (!result) {
+      if (!isAllowedPath(filePath)) {
+        return jsonResponse(403, { error: "Invalid path" });
+      }
+
+      const content = templateData.files[filePath];
+      if (content === undefined) {
         return jsonResponse(404, { error: "File not found" });
       }
 
-      return jsonResponse(200, result);
+      return jsonResponse(200, { path: filePath, content });
     }
 
     if (event.httpMethod === "PUT" && pathname.startsWith("/content")) {

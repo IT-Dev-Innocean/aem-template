@@ -9,7 +9,7 @@ lerna-debug.log*
 
 node_modules
 dist
-netlify/functions/templates
+netlify/functions/template-data.json
 dist-ssr
 *.local
 
