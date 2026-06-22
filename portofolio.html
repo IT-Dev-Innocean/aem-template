@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Portfolio Cover</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    background:#fff;
+    color:#111;
+    height:100vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    padding:80px;
+}
+
+/* ===== TOP ===== */
+.hero{
+    max-width:900px;
+}
+
+.name{
+    font-size:72px;
+    font-weight:700;
+    letter-spacing:-1px;
+    margin-bottom:10px;
+}
+
+.role{
+    font-size:22px;
+    color:#666;
+    margin-bottom:40px;
+}
+
+.tagline{
+    font-size:20px;
+    line-height:1.8;
+    color:#333;
+    max-width:700px;
+}
+
+/* ===== BOTTOM INFO ===== */
+.footer{
+    display:flex;
+    justify-content:space-between;
+    font-size:14px;
+    color:#666;
+    border-top:1px solid #eee;
+    padding-top:20px;
+}
+
+.left-info div,
+.right-info div{
+    margin-bottom:6px;
+}
+
+/* Responsive */
+@media(max-width:768px){
+    body{
+        padding:40px;
+    }
+
+    .name{
+        font-size:42px;
+    }
+
+    .tagline{
+        font-size:16px;
+    }
+
+    .footer{
+        flex-direction:column;
+        gap:20px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+    <div class="hero">
+        <div class="name">Miyuki Kazuya</div>
+        <div class="role">UI/UX Designer • 3D Developer • Frontend Engineer</div>
+
+        <div class="tagline">
+            I design and build interactive digital experiences that combine
+            clean interface design, immersive 3D environments, and thoughtful
+            user-centered development.
+        </div>
+    </div>
+
+    <div class="footer">
+        <div class="left-info">
+            <div>Email: your@email.com</div>
+            <div>Instagram / LinkedIn / GitHub</div>
+        </div>
+
+        <div class="right-info">
+            <div>Portfolio 2026</div>
+            <div>Indonesia</div>
+        </div>
+    </div>
+
+</body>
+</html>

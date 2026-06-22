@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hyundai Promise</title>
+    <style>
+        .hyundai-benefit-section {
+            display: flex;
+            justify-content: center;
+            align-items: stretch;
+            flex-wrap: wrap;
+            max-width: 1200px;
+            margin: 60px auto;
+            font-family: "HyundaiHRegular", Arial, sans-serif; 
+            gap: 20px;
+            padding: 0 20px;
+            box-sizing: border-box;
+        }
+
+        .hyundai-benefit-card {
+            flex: 1;
+            min-width: 200px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            box-sizing: border-box;
+        }
+
+        .hyundai-benefit-icon-wrapper {
+            height: 120px; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px; 
+            width: 100%;
+        }
+
+        .hyundai-benefit-icon-wrapper img {
+            width: 100px; 
+            height: 100px; 
+            object-fit: contain;
+            filter: brightness(0); 
+        }
+
+        .hyundai-benefit-label {
+            width: 100%;
+            display: table;
+            box-sizing: border-box;
+            min-height: 85px;
+            table-layout: fixed; 
+        }
+
+        .hyundai-benefit-title {
+            display: table-cell;
+            width: 100%;
+            height: 50px;
+            font-size: 16px;
+            padding: 17px;
+            background: transparent; 
+            color: #000000; 
+            text-decoration: none;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+            overflow: hidden !important;
+            vertical-align: top !important;
+            position: relative;
+            left: 0;
+            right: 0;
+            font-family: "HyundaiHRegular", Arial, sans-serif;
+            font-weight: 700;
+            text-align: center;
+            margin: 0;
+            line-height: 1.4;
+        }
+
+        @media (max-width: 900px) {
+            .hyundai-benefit-card {
+                flex: 0 1 calc(33.333% - 20px);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .hyundai-benefit-card {
+                flex: 0 1 calc(50% - 20px);
+            }
+            
+            .hyundai-benefit-icon-wrapper {
+                height: 140px; 
+            }
+
+            .hyundai-benefit-icon-wrapper img {
+                width: 100px; 
+                height: 100px; 
+            }
+            
+            .hyundai-benefit-label {
+                min-height: 75px;
+            }
+            
+            .hyundai-benefit-title {
+                padding: 10px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .hyundai-benefit-card {
+                flex: 0 1 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="hyundai-benefit-section">
+        
+        <div class="hyundai-benefit-card">
+            <div class="hyundai-benefit-icon-wrapper">
+                <img src="/content/dam/hyundai/id/id/images/local/hyundai-promise/Riwayat Servis Lengkap_100px.png" alt="Riwayat Servis Lengkap">
+            </div>
+            <div class="hyundai-benefit-label">
+                <h3 class="hyundai-benefit-title">Riwayat Servis Lengkap</h3>
+            </div>
+        </div>
+        
+        <div class="hyundai-benefit-card">
+            <div class="hyundai-benefit-icon-wrapper">
+                <img src="/content/dam/hyundai/id/id/images/local/hyundai-promise/Jaminan Suku Cadang Original_100px.png" alt="Jaminan Suku Cadang Original">
+            </div>
+            <div class="hyundai-benefit-label">
+                <h3 class="hyundai-benefit-title">Jaminan Suku Cadang Original</h3>
+            </div>
+        </div>
+        
+        <div class="hyundai-benefit-card">
+            <div class="hyundai-benefit-icon-wrapper">
+                <img src="/content/dam/hyundai/id/id/images/local/hyundai-promise/ico-bebas-banjir-dan-tabrak.png" alt="Bebas Bekas Tabrak dan Banjir">
+            </div>
+            <div class="hyundai-benefit-label">
+                <h3 class="hyundai-benefit-title">Bebas Bekas Tabrak dan Banjir</h3>
+            </div>
+        </div>
+
+        <div class="hyundai-benefit-card">
+            <div class="hyundai-benefit-icon-wrapper">
+                <img src="/content/dam/hyundai/id/id/images/local/hyundai-promise/100 titik Inspeksi_100px.png" alt="100 titik Inspeksi">
+            </div>
+            <div class="hyundai-benefit-label">
+                <h3 class="hyundai-benefit-title">100 titik Inspeksi</h3>
+            </div>
+        </div>
+
+        <div class="hyundai-benefit-card">
+            <div class="hyundai-benefit-icon-wrapper">
+                <img src="/content/dam/hyundai/id/id/images/local/hyundai-promise/layanan-darurat-100px.png" alt="Layanan Darurat 24 Jam">
+            </div>
+            <div class="hyundai-benefit-label">
+                <h3 class="hyundai-benefit-title">Layanan Darurat 24 Jam</h3>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>

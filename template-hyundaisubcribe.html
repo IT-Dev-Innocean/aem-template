@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hyundai Subscription Form - No Outline & Normal Text</title>
+    <style>
+        /* Container Utama */
+        .subscription-section {
+            display: flex;
+            justify-content: center;
+            align-items: stretch;
+            flex-wrap: wrap;
+            max-width: 1200px;
+            margin: 60px auto;
+            font-family: "Hyundai Sans Text", "Arial", sans-serif;
+            text-align: center;
+            gap: 20px;
+            padding: 0 20px;
+        }
+
+        /* Kotak Masing-masing Info */
+        .subscription-box {
+            flex: 1;
+            min-width: 160px;
+            padding: 40px 15px;
+            /* Border luar dihilangkan */
+            background-color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Styling Angka Besar */
+        .subscription-number {
+            font-size: 64px; 
+            font-weight: 700;
+            color: #000000;
+            margin-bottom: 5px;
+            line-height: 1;
+            letter-spacing: -1.5px;
+        }
+
+        /* Styling Teks Bulan */
+        .subscription-label {
+            font-size: 16px;
+            color: #333333;
+            margin-bottom: 30px;
+            letter-spacing: 0.2px;
+        }
+
+        /* Tombol Subscribe */
+        .subscribe-btn {
+            display: table-cell;
+            width: 100%;
+            height: 50px;
+            font-size: 16px;
+            padding: 17px;
+            background: #002c5f;
+            color: #fff;
+            text-decoration: none;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+            overflow: hidden !important;
+            vertical-align: middle !important;
+            position: relative;
+            left: 0;
+            right: 0;
+            font-family: "HyundaiHRegular";
+        }
+
+        /* Hover Button (Hanya underline tulisan) */
+        .subscribe-btn:hover {
+            text-decoration: underline;
+            text-underline-offset: 3px; 
+        }
+
+        /* Responsif untuk Layar Mobile/Tablet */
+        @media (max-width: 900px) {
+            .subscription-box {
+                flex: 0 1 calc(33.333% - 20px);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .subscription-box {
+                flex: 0 1 calc(50% - 20px);
+                padding: 30px 10px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .subscription-box {
+                flex: 0 1 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="subscription-section">
+        
+        <div class="subscription-box">
+            <div class="subscription-number">12</div>
+            <div class="subscription-label">Month</div>
+            <a href="https://app.ruanghsm.com/Hyundai/SubscribeForm" class="subscribe-btn">Subscribe</a>
+        </div>
+        
+        <div class="subscription-box">
+            <div class="subscription-number">24</div>
+            <div class="subscription-label">Month</div>
+            <a href="https://app.ruanghsm.com/Hyundai/SubscribeForm" class="subscribe-btn">Subscribe</a>
+        </div>
+        
+        <div class="subscription-box">
+            <div class="subscription-number">36</div>
+            <div class="subscription-label">Month</div>
+            <a href="https://app.ruanghsm.com/Hyundai/SubscribeForm" class="subscribe-btn">Subscribe</a>
+        </div>
+
+        <div class="subscription-box">
+            <div class="subscription-number">48</div>
+            <div class="subscription-label">Month</div>
+            <a href="https://app.ruanghsm.com/Hyundai/SubscribeForm" class="subscribe-btn">Subscribe</a>
+        </div>
+
+        <div class="subscription-box">
+            <div class="subscription-number">60</div>
+            <div class="subscription-label">Month</div>
+            <a href="https://app.ruanghsm.com/Hyundai/SubscribeForm" class="subscribe-btn">Subscribe</a>
+        </div>
+
+    </div>
+
+</body>
+</html>
