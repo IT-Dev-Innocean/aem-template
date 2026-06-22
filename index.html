@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Universitas Multimedia Nusantara – Kampus Inovasi Digital</title>
+  <style>
+    :root {
+      --primary: #005baa;
+      --primary-dark: #00417d;
+      --bg: #020617;
+      --surface: #020617;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --accent: #f59e0b;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+      background: radial-gradient(circle at top, #1f2937 0, #020617 55%, #020617 100%);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .page {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 1.5rem 1.25rem 3rem;
+      width: 100%;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.75rem 1rem;
+      margin-bottom: 2.5rem;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      backdrop-filter: blur(16px);
+      position: sticky;
+      top: 0.75rem;
+      z-index: 10;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .logo-mark {
+      width: 32px;
+      height: 32px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 0, #fbbf24, #2563eb);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 0.9rem;
+      font-weight: 700;
+      box-shadow: 0 0 24px rgba(59, 130, 246, 0.7);
+    }
+
+    .logo-text {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.1;
+    }
+
+    .logo-text span:first-child {
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .logo-text span:last-child {
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      font-size: 0.85rem;
+    }
+
+    nav a {
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.15s ease, transform 0.15s ease;
+    }
+
+    nav a:hover {
+      color: var(--text);
+      transform: translateY(-1px);
+    }
+
+    .btn-small {
+      padding: 0.45rem 0.9rem;
+      border-radius: 999px;
+      background: var(--primary);
+      border: 1px solid rgba(191, 219, 254, 0.8);
+      color: white;
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      transition: background 0.15s ease, transform 0.15s ease,
+        box-shadow 0.15s ease;
+      box-shadow: 0 10px 20px rgba(37, 99, 235, 0.2);
+    }
+
+    .btn-small:hover {
+      background: var(--primary-dark);
+      transform: translateY(-1px);
+      box-shadow: 0 16px 30px rgba(37, 99, 235, 0.35);
+    }
+
+    .btn-small span {
+      font-size: 1rem;
+    }
+
+    main {
+      display: grid;
+      grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+      gap: 3rem;
+      align-items: center;
+    }
+
+    .hero-kiri {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      border-radius: 999px;
+      padding: 0.25rem 0.7rem 0.25rem 0.25rem;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      width: fit-content;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .badge-dot {
+      width: 22px;
+      height: 22px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 0, #22c55e, #22c55e 40%, #22c55e33);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 18px rgba(34, 197, 94, 0.6);
+    }
+
+    .badge-dot span {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: white;
+    }
+
+    .badge strong {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    h1 {
+      font-size: clamp(2.4rem, 4vw, 3rem);
+      line-height: 1.1;
+      letter-spacing: -0.04em;
+    }
+
+    h1 span {
+      background: linear-gradient(to right, #60a5fa, #22c55e);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .hero-subtitle {
+      color: var(--muted);
+      max-width: 34rem;
+      font-size: 0.98rem;
+      line-height: 1.6;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.9rem;
+      align-items: center;
+    }
+
+    .btn-primary {
+      padding: 0.8rem 1.4rem;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #2563eb, #4f46e5);
+      color: white;
+      font-weight: 600;
+      font-size: 0.95rem;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      box-shadow: 0 18px 40px rgba(37, 99, 235, 0.4);
+      transition: transform 0.12s ease, box-shadow 0.12s ease,
+        filter 0.12s ease;
+      text-decoration: none;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 22px 50px rgba(37, 99, 235, 0.55);
+      filter: brightness(1.03);
+    }
+
+    .btn-ghost {
+      padding: 0.75rem 1.1rem;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      background: rgba(15, 23, 42, 0.7);
+      color: var(--text);
+      font-size: 0.9rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.12s ease, transform 0.12s ease,
+        border-color 0.12s ease;
+    }
+
+    .btn-ghost:hover {
+      background: rgba(30, 64, 175, 0.4);
+      border-color: rgba(191, 219, 254, 0.8);
+      transform: translateY(-1px);
+    }
+
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.4rem;
+      margin-top: 0.5rem;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .hero-meta span strong {
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .hero-kanan {
+      position: relative;
+      display: flex;
+      justify-content: center;
+    }
+
+    .card-preview {
+      width: 100%;
+      max-width: 360px;
+      border-radius: 1.5rem;
+      padding: 1rem;
+      background: radial-gradient(circle at top, #1f2937, #020617);
+      border: 1px solid rgba(148, 163, 184, 0.45);
+      box-shadow: 0 24px 60px rgba(15, 23, 42, 0.9);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card-tag {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--muted);
+      margin-bottom: 0.6rem;
+    }
+
+    .card-title {
+      font-weight: 600;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 0.4rem;
+      margin-bottom: 0.3rem;
+    }
+
+    .card-title span {
+      font-size: 0.8rem;
+      color: var(--accent);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .card-sub {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-bottom: 1rem;
+    }
+
+    .card-metrics {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.6rem;
+      margin-bottom: 1rem;
+    }
+
+    .metric {
+      padding: 0.6rem;
+      border-radius: 0.9rem;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.45);
+      font-size: 0.72rem;
+    }
+
+    .metric strong {
+      display: block;
+      font-size: 0.95rem;
+      margin-bottom: 0.15rem;
+    }
+
+    .metric span {
+      color: var(--muted);
+      font-size: 0.7rem;
+    }
+
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    .card-users {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+    }
+
+    .avatar-stack {
+      display: flex;
+    }
+
+    .avatar {
+      width: 22px;
+      height: 22px;
+      border-radius: 999px;
+      border: 2px solid #020617;
+      background: linear-gradient(135deg, #3b82f6, #ec4899);
+      margin-left: -6px;
+    }
+
+    .avatar:first-child {
+      margin-left: 0;
+    }
+
+    .card-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0.3rem 0.6rem;
+      border-radius: 999px;
+      background: rgba(22, 163, 74, 0.12);
+      color: #4ade80;
+      border: 1px solid rgba(74, 222, 128, 0.4);
+    }
+
+    .card-orbit {
+      position: absolute;
+      inset: -40%;
+      opacity: 0.3;
+      background:
+        radial-gradient(circle at 10% 10%, rgba(56, 189, 248, 0.4), transparent 55%),
+        radial-gradient(circle at 90% 0, rgba(59, 130, 246, 0.45), transparent 60%),
+        radial-gradient(circle at 50% 100%, rgba(236, 72, 153, 0.35), transparent 55%);
+      pointer-events: none;
+      mix-blend-mode: screen;
+    }
+
+    section#features {
+      margin-top: 3.5rem;
+    }
+
+    .section-heading {
+      font-size: 1.2rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .section-subtitle {
+      font-size: 0.9rem;
+      color: var(--muted);
+      max-width: 26rem;
+    }
+
+    .feature-grid {
+      margin-top: 1.6rem;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1.2rem;
+    }
+
+    .feature-card {
+      background: rgba(15, 23, 42, 0.9);
+      border-radius: 1.1rem;
+      padding: 1rem;
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      font-size: 0.85rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+      transition: transform 0.15s ease, box-shadow 0.15s ease,
+        border-color 0.15s ease, background 0.15s ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 16px 40px rgba(15, 23, 42, 0.9);
+      border-color: rgba(191, 219, 254, 0.8);
+      background: rgba(15, 23, 42, 0.98);
+    }
+
+    .feature-icon {
+      width: 30px;
+      height: 30px;
+      border-radius: 0.85rem;
+      background: radial-gradient(circle at 30% 0, #60a5fa, #2563eb);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+    }
+
+    .feature-title {
+      font-weight: 600;
+    }
+
+    .feature-text {
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    footer {
+      margin-top: 3rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(30, 64, 175, 0.7);
+      font-size: 0.8rem;
+      color: var(--muted);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    footer a {
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.15s ease;
+    }
+
+    footer a:hover {
+      color: var(--text);
+    }
+
+    @media (max-width: 768px) {
+      header {
+        padding-inline: 0.8rem;
+      }
+
+      nav {
+        gap: 0.7rem;
+      }
+
+      nav a:nth-child(2),
+      nav a:nth-child(3) {
+        display: none;
+      }
+
+      main {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 2.1rem;
+      }
+
+      .hero-kanan {
+        order: -1;
+      }
+
+      .page {
+        padding-inline: 1rem;
+      }
+
+      .feature-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <div class="logo">
+        <div class="logo-mark">U</div>
+        <div class="logo-text">
+          <span>UMN</span>
+          <span>Universitas Multimedia Nusantara</span>
+        </div>
+      </div>
+      <nav>
+        <a href="#about">Tentang</a>
+        <a href="#programs">Program Studi</a>
+        <a href="#life">Kehidupan Kampus</a>
+        <a href="#contact">Kontak</a>
+        <a href="#cta" class="btn-small">
+          Daftar Sekarang
+          <span>✦</span>
+        </a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero-kiri" id="cta">
+        <div class="badge">
+          <div class="badge-dot">
+            <span></span>
+          </div>
+          <span>Penerimaan Mahasiswa Baru</span>
+          <strong>Tahun Akademik 2026/2027</strong>
+        </div>
+
+        <h1>
+          Kampus
+          <span>inovasi digital</span>
+          yang siap membangun masa depanmu.
+        </h1>
+
+        <p class="hero-subtitle">
+          Universitas Multimedia Nusantara (UMN) adalah kampus yang fokus pada
+          teknologi, kreativitas, dan kewirausahaan. Belajar di lingkungan
+          modern dengan fasilitas terkini dan ekosistem industri yang kuat.
+        </p>
+
+        <div class="hero-actions">
+          <a href="#contact" class="btn-primary">
+            Konsultasi & Info Pendaftaran
+            <span>→</span>
+          </a>
+          <a href="#programs" class="btn-ghost">
+            Lihat program studi
+          </a>
+        </div>
+
+        <div class="hero-meta">
+          <span><strong>+10.000</strong> alumni di industri kreatif & teknologi</span>
+          <span>Terakreditasi Unggul & berlokasi di Gading Serpong</span>
+        </div>
+      </section>
+
+      <section class="hero-kanan" aria-hidden="true">
+        <div class="card-preview">
+          <div class="card-orbit"></div>
+          <div class="card-tag">Snapshot Kampus</div>
+          <div class="card-title">
+            <span>UMN Digital Campus</span>
+            <span>● Aktif & dinamis</span>
+          </div>
+          <p class="card-sub">
+            Kolaborasi mahasiswa lintas prodi, event kampus, dan proyek nyata
+            bersama industri dalam satu ekosistem pembelajaran.
+          </p>
+
+          <div class="card-metrics">
+            <div class="metric">
+              <strong>50+</strong>
+              <span>unit kegiatan mahasiswa</span>
+            </div>
+            <div class="metric">
+              <strong>8+</strong>
+              <span>laboratorium & studio modern</span>
+            </div>
+            <div class="metric">
+              <strong>Internship</strong>
+              <span>terhubung ke industri</span>
+            </div>
+          </div>
+
+          <div class="card-footer">
+            <div class="card-users">
+              <div class="avatar-stack">
+                <div class="avatar"></div>
+                <div class="avatar"></div>
+                <div class="avatar"></div>
+              </div>
+              <span>Mahasiswa dari berbagai daerah & negara</span>
+            </div>
+            <div class="card-status">
+              <span>⚡ Komunitas aktif</span>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <section id="about">
+      <h2 class="section-heading">Tentang Universitas Multimedia Nusantara</h2>
+      <p class="section-subtitle">
+        UMN berkomitmen mencetak lulusan yang unggul di bidang ICT, bisnis,
+        dan komunikasi, dengan kurikulum yang selaras kebutuhan industri.
+      </p>
+    </section>
+
+    <section id="programs">
+      <h2 class="section-heading">Program studi unggulan</h2>
+      <p class="section-subtitle">
+        Pilih jalur yang sesuai dengan passion-mu, dari teknologi, desain,
+        hingga komunikasi dan bisnis.
+      </p>
+
+      <div class="feature-grid">
+        <article class="feature-card">
+          <div class="feature-icon">⚙️</div>
+          <div class="feature-title">Teknik & Informatika</div>
+          <p class="feature-text">
+            Program studi seperti Informatika, Sistem Informasi, dan Teknik
+            Komputer yang membekali kamu dengan skill teknologi masa depan.
+          </p>
+        </article>
+
+        <article class="feature-card">
+          <div class="feature-icon">📱</div>
+          <div class="feature-title">Desain & Kreatif</div>
+          <p class="feature-text">
+            Kembangkan portofolio di bidang Desain Komunikasi Visual, Film,
+            Animasi, dan program kreatif lainnya.
+          </p>
+        </article>
+
+        <article class="feature-card">
+          <div class="feature-icon">🚀</div>
+          <div class="feature-title">Bisnis & Komunikasi</div>
+          <p class="feature-text">
+            Kuasai keahlian komunikasi strategis, periklanan, dan bisnis agar
+            siap memimpin di era digital.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <section id="life">
+      <h2 class="section-heading">Kehidupan kampus yang aktif & inspiratif</h2>
+      <p class="section-subtitle">
+        Dari organisasi mahasiswa, kompetisi, hingga event skala nasional,
+        UMN menyediakan ruang untuk kamu berkembang di dalam dan luar kelas.
+      </p>
+      <div class="feature-grid">
+        <article class="feature-card">
+          <div class="feature-icon">🏫</div>
+          <div class="feature-title">Fasilitas modern</div>
+          <p class="feature-text">
+            Nikmati ruang kelas nyaman, auditorium, studio radio/TV, laboratorium,
+            dan area kolaborasi yang dirancang untuk generasi digital.
+          </p>
+        </article>
+        <article class="feature-card">
+          <div class="feature-icon">🎓</div>
+          <div class="feature-title">Komunitas & organisasi</div>
+          <p class="feature-text">
+            Bergabung dengan berbagai UKM dan komunitas untuk mengasah soft skill,
+            leadership, dan jaringan pertemanan yang luas.
+          </p>
+        </article>
+        <article class="feature-card">
+          <div class="feature-icon">🌏</div>
+          <div class="feature-title">Jaringan global</div>
+          <p class="feature-text">
+            Kesempatan pertukaran pelajar dan kolaborasi internasional membuka
+            pintu pengalaman belajar lintas negara.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <footer id="contact">
+      <span>© <span id="year"></span> Universitas Multimedia Nusantara. Semua hak dilindungi.</span>
+      <span>
+        Info lebih lanjut & pendaftaran: 
+        <a href="mailto:info@umn.ac.id">info@umn.ac.id</a>
+      </span>
+    </footer>
+  </div>
+
+  <script>
+    // Set tahun otomatis di footer
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
+

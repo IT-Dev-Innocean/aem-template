@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tabel Perbandingan Hyundai</title>
+    <style>
+        .hyundai-comparison-wrapper {
+            max-width: 1000px;
+            margin: 40px auto;
+            font-family: "HyundaiRegular", "HyundaiHRegular", Arial, sans-serif; 
+            color: #000000;
+            overflow-x: auto; 
+            padding: 0 15px;
+        }
+
+        .hyundai-comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: center;
+            min-width: 700px;
+        }
+
+        .hyundai-comparison-table th,
+        .hyundai-comparison-table td {
+            padding: 35px 20px;
+            vertical-align: middle;
+            border: none;
+        }
+
+        .hyundai-comparison-table th {
+            font-family: "HyundaiMedium", "HyundaiHRegular", Arial, sans-serif;
+            font-size: 18px;
+            font-weight: normal;
+            padding-bottom: 25px;
+        }
+
+        .hyundai-comparison-table td:first-child {
+            font-family: "HyundaiMedium", "HyundaiHRegular", Arial, sans-serif;
+            font-size: 16px;
+            font-weight: normal !important;
+            width: 25%;
+        }
+
+        .hyundai-comparison-table .row-highlight {
+            background-color: #faf6f5; 
+        }
+
+        .hyundai-comparison-table .row-highlight td {
+            font-size: 16px;
+            line-height: 1.6;
+            font-weight: normal;
+        }
+
+        .warranty-content {
+            font-size: 16px;
+            line-height: 1.4;
+        }
+
+        .warranty-title {
+            display: block;
+            margin-top: 20px;
+            font-weight: 700;
+        }
+
+        .warranty-title:first-child {
+            margin-top: 0;
+        }
+
+        .warranty-desc {
+            font-family: "HyundaiRegular", "HyundaiHRegular", Arial, sans-serif;
+            display: block;
+            font-weight: normal;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="hyundai-comparison-wrapper">
+        <table class="hyundai-comparison-table">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Hyundai Promise</th>
+                    <th>Hyundai Approved</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+                <tr class="row-highlight">
+                    <td>Kriteria Kendaraan</td>
+                    <td>
+                        Maks. 4 tahun<br>
+                        Jarak Tempuh: 100.000 km
+                    </td>
+                    <td>
+                        5-8 tahun<br>
+                        Jarak Tempuh: 120.000 km
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>Garansi</td>
+                    <td>
+                        <div class="warranty-content">
+                            <span class="warranty-title">Periode</span>
+                            <span class="warranty-desc">1 tahun</span>
+                            
+                            <span class="warranty-title">Komponen yang Dijamin</span>
+                            <span class="warranty-desc">Semua komponen*</span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="warranty-content">
+                            <span class="warranty-title">Periode</span>
+                            <span class="warranty-desc">3 bulan</span>
+                            
+                            <span class="warranty-title">Komponen yang Dijamin</span>
+                            <span class="warranty-desc">Engine, AC, dan Transmisi</span>
+                        </div>
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+
+</body>
+</html>
