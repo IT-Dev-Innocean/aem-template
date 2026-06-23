@@ -1,12 +1,35 @@
 import * as Collapsible from "@radix-ui/react-collapsible";
-import * as ScrollArea from "@radix-ui/react-scroll-area";
-import { ChevronDown, ChevronRight, FileCode2, Folder, FolderOpen } from "lucide-react";
+import {
+  ChevronDown,
+  ChevronRight,
+  FileCode2,
+  FileJson2,
+  FileText,
+  Folder,
+  FolderOpen,
+} from "lucide-react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useMemo, useState } from "react";
+import { useMemo, useState, type ElementType } from "react";
 import type { FileNode } from "../../vite-plugin-file-api";
 import { useEditor } from "@/context/editor-context";
 import { fetchFileContent, fetchFileTree } from "@/lib/file-api";
-import { cn, getFileName } from "@/lib/utils";
+import { cn, getFileName, getLanguageFromPath } from "@/lib/utils";
+
+function getFileIcon(filePath: string): ElementType {
+  const language = getLanguageFromPath(filePath);
+
+  switch (language) {
+    case "html":
+    case "css":
+    case "javascript":
+    case "typescript":
+      return FileCode2;
+    case "json":
+      return FileJson2;
+    default:
+      return FileText;
+  }
+}
 
 function FileTreeItem({ node, depth = 0 }: { node: FileNode; depth?: number }) {
   const [open, setOpen] = useState(depth < 1);
@@ -29,8 +52,12 @@ function FileTreeItem({ node, depth = 0 }: { node: FileNode; depth?: number }) {
           style={{ paddingLeft: `${depth * 12 + 8}px` }}
         >
           {open ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
-          {open ? <FolderOpen size={15} className="text-[#dcb67a]" /> : <Folder size={15} className="text-[#dcb67a]" />}
-          <span>{node.name}</span>
+          {open ? (
+            <FolderOpen size={15} className="text-[#dcb67a]" />
+          ) : (
+            <Folder size={15} className="text-[#dcb67a]" />
+          )}
+          <span className="truncate">{node.name}</span>
         </Collapsible.Trigger>
         <Collapsible.Content>
           {node.children?.map((child) => (
@@ -42,6 +69,7 @@ function FileTreeItem({ node, depth = 0 }: { node: FileNode; depth?: number }) {
   }
 
   const isActive = activeTabPath === node.path;
+  const FileIcon = getFileIcon(node.path);
 
   return (
     <button
@@ -53,7 +81,7 @@ function FileTreeItem({ node, depth = 0 }: { node: FileNode; depth?: number }) {
       )}
       style={{ paddingLeft: `${depth * 12 + 24}px` }}
     >
-      <FileCode2 size={15} className="text-[#519aba]" />
+      <FileIcon size={15} className="shrink-0 text-[#519aba]" />
       <span className="truncate">{node.name}</span>
     </button>
   );
@@ -86,8 +114,8 @@ function SearchPanel({ tree }: { tree: FileNode[] }) {
   }, [searchQuery, tree]);
 
   return (
-    <div className="flex h-full flex-col">
-      <div className="border-b border-vscode-border px-3 py-3">
+    <div className="flex min-h-0 flex-1 flex-col">
+      <div className="shrink-0 border-b border-vscode-border px-3 py-3">
         <input
           value={searchQuery}
           onChange={(event) => setSearchQuery(event.target.value)}
@@ -95,33 +123,28 @@ function SearchPanel({ tree }: { tree: FileNode[] }) {
           className="w-full rounded border border-vscode-border bg-vscode-bg px-2 py-1.5 text-sm text-vscode-text outline-none focus:border-vscode-accent"
         />
       </div>
-      <ScrollArea.Root className="flex-1">
-        <ScrollArea.Viewport className="h-full w-full">
-          <div className="p-2">
-            {results.length === 0 ? (
-              <p className="px-2 py-4 text-xs text-vscode-muted">No matching files</p>
-            ) : (
-              results.map((file) => (
-                <button
-                  key={file.path}
-                  type="button"
-                  onClick={() => openFileMutation.mutate(file.path)}
-                  className={cn(
-                    "flex w-full flex-col rounded px-2 py-2 text-left hover:bg-vscode-hover",
-                    activeTabPath === file.path && "bg-vscode-selection",
-                  )}
-                >
-                  <span className="text-sm">{file.name}</span>
-                  <span className="text-xs text-vscode-muted">{file.path}</span>
-                </button>
-              ))
-            )}
-          </div>
-        </ScrollArea.Viewport>
-        <ScrollArea.Scrollbar orientation="vertical" className="w-2 bg-transparent">
-          <ScrollArea.Thumb className="rounded bg-[#424242]" />
-        </ScrollArea.Scrollbar>
-      </ScrollArea.Root>
+      <div className="min-h-0 flex-1 overflow-y-auto">
+        <div className="p-2">
+          {results.length === 0 ? (
+            <p className="px-2 py-4 text-xs text-vscode-muted">No matching files</p>
+          ) : (
+            results.map((file) => (
+              <button
+                key={file.path}
+                type="button"
+                onClick={() => openFileMutation.mutate(file.path)}
+                className={cn(
+                  "flex w-full flex-col rounded px-2 py-2 text-left hover:bg-vscode-hover",
+                  activeTabPath === file.path && "bg-vscode-selection",
+                )}
+              >
+                <span className="text-sm">{file.name}</span>
+                <span className="text-xs text-vscode-muted">{file.path}</span>
+              </button>
+            ))
+          )}
+        </div>
+      </div>
     </div>
   );
 }
@@ -135,33 +158,28 @@ export function Sidebar() {
     staleTime: import.meta.env.PROD ? 15_000 : 30_000,
   });
 
+  const fileCount = tree.reduce((count, node) => count + flattenFiles([node]).length, 0);
+
   return (
-    <aside className="flex h-full w-72 shrink-0 flex-col border-r border-vscode-border bg-vscode-sidebar">
-      <div className="flex h-9 items-center justify-between border-b border-vscode-border px-4 text-[11px] font-semibold uppercase tracking-wide text-vscode-muted">
+    <aside className="flex h-full min-h-0 w-72 shrink-0 flex-col border-r border-vscode-border bg-vscode-sidebar">
+      <div className="flex h-9 shrink-0 items-center justify-between border-b border-vscode-border px-4 text-[11px] font-semibold uppercase tracking-wide text-vscode-muted">
         <span>{sidebarView === "explorer" ? "Explorer" : "Search"}</span>
       </div>
 
       {sidebarView === "search" ? (
         <SearchPanel tree={tree} />
       ) : (
-        <ScrollArea.Root className="flex-1">
-          <ScrollArea.Viewport className="h-full w-full">
-            <div className="py-2">
-              {isLoading && <p className="px-4 py-2 text-xs text-vscode-muted">Loading files...</p>}
-              {error && <p className="px-4 py-2 text-xs text-red-400">Failed to load files</p>}
-              {!isLoading &&
-                tree.map((node) => <FileTreeItem key={node.path} node={node} />)}
-            </div>
-          </ScrollArea.Viewport>
-          <ScrollArea.Scrollbar orientation="vertical" className="w-2 bg-transparent">
-            <ScrollArea.Thumb className="rounded bg-[#424242]" />
-          </ScrollArea.Scrollbar>
-        </ScrollArea.Root>
+        <div className="explorer-scroll min-h-0 flex-1 overflow-y-auto overflow-x-hidden">
+          <div className="py-2">
+            {isLoading && <p className="px-4 py-2 text-xs text-vscode-muted">Loading files...</p>}
+            {error && <p className="px-4 py-2 text-xs text-red-400">Failed to load files</p>}
+            {!isLoading && tree.map((node) => <FileTreeItem key={node.path} node={node} />)}
+          </div>
+        </div>
       )}
 
-      <div className="border-t border-vscode-border px-3 py-2 text-[11px] text-vscode-muted">
-        {tree.reduce((count, node) => count + flattenFiles([node]).length, 0)} template files
-        {tree.length > 0 ? ` in ${tree.map((node) => node.name).join(", ")}` : ""}
+      <div className="shrink-0 border-t border-vscode-border px-3 py-2 text-[11px] text-vscode-muted">
+        {fileCount} template files
       </div>
     </aside>
   );

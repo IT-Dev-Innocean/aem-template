@@ -3,7 +3,7 @@ import {
   fetchGitHubFileContent,
   fetchGitHubFileTree,
 } from "../../shared/github-file-api.ts";
-import { isTemplateRoot } from "../../shared/template-roots.ts";
+import { isAllowedFilePath } from "../../shared/template-roots.ts";
 
 function jsonResponse(status: number, data: unknown) {
   return {
@@ -25,7 +25,7 @@ function getApiPath(eventPath: string): string {
 }
 
 function isAllowedPath(filePath: string): boolean {
-  return isTemplateRoot(filePath.split("/")[0] ?? "");
+  return isAllowedFilePath(filePath);
 }
 
 export const handler: Handler = async (event) => {

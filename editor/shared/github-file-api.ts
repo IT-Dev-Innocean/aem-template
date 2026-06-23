@@ -1,5 +1,5 @@
 import type { FileNode } from "./file-api-core.ts";
-import { isTemplateRoot } from "./template-roots.ts";
+import { isAllowedFilePath, isExcludedRoot } from "./template-roots.ts";
 const CACHE_TTL_MS = 30_000;
 
 type GitHubConfig = {
@@ -68,36 +68,38 @@ function sortNode(node: FileNode) {
   }
 }
 
-function getTemplateRootsFromPaths(filePaths: string[]): string[] {
-  const roots = new Set<string>();
-
-  for (const filePath of filePaths) {
-    const root = filePath.split("/")[0];
-    if (isTemplateRoot(root)) {
-      roots.add(root);
-    }
-  }
-
-  return [...roots].sort((a, b) => a.localeCompare(b));
-}
-
 function buildTreeFromPaths(filePaths: string[]): FileNode[] {
-  const templateRoots = getTemplateRootsFromPaths(filePaths);
-  const roots: Record<string, FileNode> = {};
+  const rootFolders = new Map<string, FileNode>();
+  const rootFiles: FileNode[] = [];
 
-  for (const root of templateRoots) {
-    roots[root] = { name: root, path: root, type: "folder", children: [] };
-  }
-
-  for (const filePath of filePaths.sort()) {
-    const parts = filePath.split("/");
-    const rootName = parts[0];
-
-    if (!isTemplateRoot(rootName) || !roots[rootName]) {
+  for (const filePath of [...filePaths].sort()) {
+    if (!isAllowedFilePath(filePath)) {
       continue;
     }
 
-    let current = roots[rootName];
+    const parts = filePath.split("/");
+
+    if (parts.length === 1) {
+      rootFiles.push({ name: parts[0], path: parts[0], type: "file" });
+      continue;
+    }
+
+    const rootName = parts[0];
+    if (isExcludedRoot(rootName)) {
+      continue;
+    }
+
+    let current: FileNode = rootFolders.get(rootName) ?? {
+      name: rootName,
+      path: rootName,
+      type: "folder",
+      children: [],
+    };
+
+    if (!rootFolders.has(rootName)) {
+      rootFolders.set(rootName, current);
+    }
+
     let currentPath = rootName;
 
     for (let index = 1; index < parts.length; index += 1) {
@@ -111,11 +113,12 @@ function buildTreeFromPaths(filePaths: string[]): FileNode[] {
 
       if (isFile) {
         current.children.push({ name: part, path: currentPath, type: "file" });
-        continue;
+        break;
       }
 
       let folder = current.children.find(
-        (child) => child.name === part && child.type === "folder",
+        (child): child is FileNode & { type: "folder" } =>
+          child.name === part && child.type === "folder",
       );
 
       if (!folder) {
@@ -127,11 +130,15 @@ function buildTreeFromPaths(filePaths: string[]): FileNode[] {
     }
   }
 
-  for (const root of Object.values(roots)) {
-    sortNode(root);
+  const folders = [...rootFolders.values()].sort((a, b) => a.name.localeCompare(b.name));
+  for (const folder of folders) {
+    sortNode(folder);
   }
 
-  return templateRoots.map((name) => roots[name]);
+  return [
+    ...folders,
+    ...rootFiles.sort((a, b) => a.name.localeCompare(b.name)),
+  ];
 }
 
 export async function fetchGitHubFileTree(): Promise<FileNode[]> {
@@ -148,7 +155,7 @@ export async function fetchGitHubFileTree(): Promise<FileNode[]> {
   const filePaths = data.tree
     .filter((item) => item.type === "blob")
     .map((item) => item.path)
-    .filter((filePath) => isTemplateRoot(filePath.split("/")[0]));
+    .filter((filePath) => isAllowedFilePath(filePath));
 
   const tree = buildTreeFromPaths(filePaths);
   treeCache = { value: tree, expiresAt: Date.now() + CACHE_TTL_MS };

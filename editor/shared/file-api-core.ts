@@ -1,6 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
-import { isTemplateRoot } from "./template-roots.ts";
+import { isAllowedFilePath, isEditableFile, isExcludedRoot } from "./template-roots.ts";
 
 export type FileNode = {
   name: string;
@@ -9,16 +9,85 @@ export type FileNode = {
   children?: FileNode[];
 };
 
-export function getTemplateRoots(projectRoot: string): string[] {
+function sortEntries<T extends { name: string; isDirectory(): boolean }>(entries: T[]): T[] {
+  return entries.sort((a, b) => {
+    if (a.isDirectory() && !b.isDirectory()) return -1;
+    if (!a.isDirectory() && b.isDirectory()) return 1;
+    return a.name.localeCompare(b.name);
+  });
+}
+
+function buildTree(dirPath: string, relativePath: string): FileNode[] {
+  if (!fs.existsSync(dirPath)) {
+    return [];
+  }
+
+  const nodes: FileNode[] = [];
+
+  for (const entry of sortEntries(fs.readdirSync(dirPath, { withFileTypes: true }))) {
+    if (entry.name.startsWith(".")) {
+      continue;
+    }
+
+    const entryRelative = path.join(relativePath, entry.name);
+    const entryAbsolute = path.join(dirPath, entry.name);
+
+    if (entry.isDirectory()) {
+      nodes.push({
+        name: entry.name,
+        path: entryRelative.replace(/\\/g, "/"),
+        type: "folder",
+        children: buildTree(entryAbsolute, entryRelative),
+      });
+      continue;
+    }
+
+    if (entry.isFile() && isEditableFile(entry.name)) {
+      nodes.push({
+        name: entry.name,
+        path: entryRelative.replace(/\\/g, "/"),
+        type: "file",
+      });
+    }
+  }
+
+  return nodes;
+}
+
+export function buildFileTree(projectRoot: string): FileNode[] {
   if (!fs.existsSync(projectRoot)) {
     return [];
   }
 
-  return fs
-    .readdirSync(projectRoot, { withFileTypes: true })
-    .filter((entry) => entry.isDirectory() && isTemplateRoot(entry.name))
-    .map((entry) => entry.name)
-    .sort((a, b) => a.localeCompare(b));
+  const nodes: FileNode[] = [];
+
+  for (const entry of sortEntries(fs.readdirSync(projectRoot, { withFileTypes: true }))) {
+    if (isExcludedRoot(entry.name)) {
+      continue;
+    }
+
+    const entryAbsolute = path.join(projectRoot, entry.name);
+
+    if (entry.isDirectory()) {
+      nodes.push({
+        name: entry.name,
+        path: entry.name,
+        type: "folder",
+        children: buildTree(entryAbsolute, entry.name),
+      });
+      continue;
+    }
+
+    if (entry.isFile() && isEditableFile(entry.name)) {
+      nodes.push({
+        name: entry.name,
+        path: entry.name,
+        type: "file",
+      });
+    }
+  }
+
+  return nodes;
 }
 
 export function resolveSafePath(projectRoot: string, relativePath: string): string | null {
@@ -30,55 +99,11 @@ export function resolveSafePath(projectRoot: string, relativePath: string): stri
     return null;
   }
 
-  const rootFolder = relative.split(path.sep)[0];
-  if (!isTemplateRoot(rootFolder)) {
+  if (!isAllowedFilePath(relative.replace(/\\/g, "/"))) {
     return null;
   }
 
   return fullPath;
-}
-
-function buildTree(dirPath: string, relativePath: string): FileNode[] {
-  if (!fs.existsSync(dirPath)) {
-    return [];
-  }
-
-  return fs
-    .readdirSync(dirPath, { withFileTypes: true })
-    .filter((entry) => !entry.name.startsWith("."))
-    .sort((a, b) => {
-      if (a.isDirectory() && !b.isDirectory()) return -1;
-      if (!a.isDirectory() && b.isDirectory()) return 1;
-      return a.name.localeCompare(b.name);
-    })
-    .map((entry) => {
-      const entryRelative = path.join(relativePath, entry.name);
-      const entryAbsolute = path.join(dirPath, entry.name);
-
-      if (entry.isDirectory()) {
-        return {
-          name: entry.name,
-          path: entryRelative.replace(/\\/g, "/"),
-          type: "folder" as const,
-          children: buildTree(entryAbsolute, entryRelative),
-        };
-      }
-
-      return {
-        name: entry.name,
-        path: entryRelative.replace(/\\/g, "/"),
-        type: "file" as const,
-      };
-    });
-}
-
-export function buildFileTree(projectRoot: string): FileNode[] {
-  return getTemplateRoots(projectRoot).map((folder) => ({
-    name: folder,
-    path: folder,
-    type: "folder" as const,
-    children: buildTree(path.join(projectRoot, folder), folder),
-  }));
 }
 
 export function readFileContent(
