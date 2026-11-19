@@ -1,0 +1,156 @@
+<html>
+
+<head>
+    <title>ioniq5 exterior FAQ</title>
+    <style>
+        .hyu-faq {
+            padding: 16px 20px 88px;
+            background: #fff;
+            color: #000;
+            font-family: "HyundaiRegular", "Hyundai Sans Head", Arial, Helvetica, sans-serif;
+            box-sizing: border-box;
+        }
+
+        .hyu-faq *,
+        .hyu-faq *::before,
+        .hyu-faq *::after {
+            box-sizing: border-box;
+        }
+
+        .hyu-faq__inner {
+            width: 100%;
+            max-width: 1120px;
+            margin: 0 auto;
+        }
+
+        .hyu-faq__list {
+            border-top: 1px solid #e4e4e4;
+        }
+
+        .hyu-faq__item {
+            border-bottom: 1px solid #e4e4e4;
+        }
+
+        .hyu-faq__question {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+            margin: 0;
+            padding: 22px 8px;
+            color: #000;
+            font-family: "HyundaiMedium", "Hyundai Sans Head Medium", Arial, Helvetica, sans-serif;
+            font-size: 16px;
+            font-weight: 500;
+            line-height: 1.45;
+            list-style: none;
+            cursor: pointer;
+        }
+
+        .hyu-faq__question::-webkit-details-marker {
+            display: none;
+        }
+
+        .hyu-faq__question::marker {
+            content: "";
+        }
+
+        .hyu-faq__question:focus {
+            outline: none;
+        }
+
+        .hyu-faq__question:focus-visible {
+            outline: 2px solid #002c5f;
+            outline-offset: 2px;
+        }
+
+        .hyu-faq__chevron {
+            flex-shrink: 0;
+            width: 8px;
+            height: 8px;
+            margin-right: 6px;
+            border-right: 1.5px solid #000;
+            border-bottom: 1.5px solid #000;
+            transform: translateY(-2px) rotate(45deg);
+            transition: transform 0.2s ease;
+        }
+
+        .hyu-faq__item[open] .hyu-faq__chevron {
+            transform: translateY(2px) rotate(-135deg);
+        }
+
+        .hyu-faq__answer {
+            padding: 20px 37px;
+            background-color: #fafafa;
+        }
+
+        .hyu-faq__answer p {
+            margin: 0;
+            color: #000;
+            font-family: "HyundaiRegular", "Hyundai Sans Head", Arial, Helvetica, sans-serif;
+            font-size: 16px;
+            font-weight: 400;
+            line-height: 1.75;
+        }
+
+        @media screen and (max-width: 767px) {
+            .hyu-faq {
+                padding: 10px 16px 64px;
+            }
+
+            .hyu-faq__question {
+                gap: 16px;
+                padding: 18px 4px;
+                font-size: 15px;
+            }
+
+            .hyu-faq__answer {
+                padding: 20px 16px;
+            }
+
+            .hyu-faq__answer p {
+                font-size: 14px;
+                line-height: 1.7;
+            }
+        }
+    
+    </style>
+</head>
+
+<body>
+    <section class="hyu-faq">
+        <div class="hyu-faq__inner">
+            <div class="hyu-faq__list">
+                <details class="hyu-faq__item" name="hyu-faq" open>
+                    <summary class="hyu-faq__question">
+                        What design signature defines the IONIQ 5 exterior?
+                        <span class="hyu-faq__chevron" aria-hidden="true"></span>
+                    </summary>
+                    <div class="hyu-faq__answer">
+                        <p>The IONIQ 5 is defined by Parametric Pixel style, including a Parametric Pixel Rear Lamp.</p>
+                    </div>
+                </details>
+                <details class="hyu-faq__item" name="hyu-faq">
+                    <summary class="hyu-faq__question">
+                        Where is the charging port on the IONIQ 5?
+                        <span class="hyu-faq__chevron" aria-hidden="true"></span>
+                    </summary>
+                    <div class="hyu-faq__answer">
+                        <p>The IONIQ 5 has a Hidden Charging Port Door integrated into the exterior.</p>
+                    </div>
+                </details>
+                <details class="hyu-faq__item" name="hyu-faq">
+                    <summary class="hyu-faq__question">
+                        What wheels are offered on the IONIQ 5?
+                        <span class="hyu-faq__chevron" aria-hidden="true"></span>
+                    </summary>
+                    <div class="hyu-faq__answer">
+                        <p>20-inch Fractal Alloy Wheels are offered.</p>
+                    </div>
+                </details>
+            </div>
+        </div>
+    </section>
+</body>
+
+</html>
